@@ -1,0 +1,33 @@
+//Solution to Add Binary problem on leetcode - https://leetcode.com/problems/add-binary/
+
+//Watch video for detailed explanation - https://www.youtube.com/watch?v=1i1ts8dPkHE
+
+class Solution {
+    public String addBinary(String a, String b) {
+        StringBuilder result = new StringBuilder();
+        
+        int aIdx = a.length()-1;
+        int bIdx = b.length()-1;
+        
+        int sum = 0;
+        
+        while(aIdx>=0 || bIdx>=0 || sum == 1) {
+            
+            int aDigit = (aIdx>=0) ? a.charAt(aIdx) - '0' : 0;
+            int bDigit = (bIdx>=0) ? b.charAt(bIdx) - '0' : 0;
+            
+            sum = sum + aDigit + bDigit;
+            
+            char digit = (char)(sum % 2 + '0');
+            result.append(digit);
+            
+            sum = sum/2;
+            
+            aIdx--;
+            bIdx--;
+            
+        }
+        
+        return result.reverse().toString();
+    }
+}
