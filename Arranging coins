@@ -1,0 +1,15 @@
+//Solution of leetcode problem - Arranging coins
+//https://leetcode.com/problems/arranging-coins/
+
+//Watch video for detailed explanation - https://www.youtube.com/watch?v=34lIp2XRCac
+
+class Solution {
+    public int arrangeCoins(int n) {
+        int k = 0;
+        while(n>=k) {
+            n = n-k;
+            k++;
+        }
+        return k-1;
+    }
+}
