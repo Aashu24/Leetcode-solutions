@@ -1,0 +1,82 @@
+/*
+https://leetcode.com/problems/construct-quad-tree/
+
+// Definition for a QuadTree node.
+class Node {
+    public boolean val;
+    public boolean isLeaf;
+    public Node topLeft;
+    public Node topRight;
+    public Node bottomLeft;
+    public Node bottomRight;
+
+    
+    public Node() {
+        this.val = false;
+        this.isLeaf = false;
+        this.topLeft = null;
+        this.topRight = null;
+        this.bottomLeft = null;
+        this.bottomRight = null;
+    }
+    
+    public Node(boolean val, boolean isLeaf) {
+        this.val = val;
+        this.isLeaf = isLeaf;
+        this.topLeft = null;
+        this.topRight = null;
+        this.bottomLeft = null;
+        this.bottomRight = null;
+    }
+    
+    public Node(boolean val, boolean isLeaf, Node topLeft, Node topRight, Node bottomLeft, Node bottomRight) {
+        this.val = val;
+        this.isLeaf = isLeaf;
+        this.topLeft = topLeft;
+        this.topRight = topRight;
+        this.bottomLeft = bottomLeft;
+        this.bottomRight = bottomRight;
+    }
+};
+*/
+
+class Solution {
+    public Node construct(int[][] grid) {
+        return construct(grid,0,grid.length-1,0,grid[0].length-1);
+    }
+    private Node construct(int[][] grid, int rowStart, int rowEnd, int colStart, int colEnd) {
+        //Negative base case
+        if(rowStart>rowEnd||colStart>colEnd||rowStart<0||rowEnd>=grid.length||colStart<0||colStart>=grid[0].length) {
+            return null;
+        }
+        //Positive base case
+        if(rowStart==rowEnd&&colStart==colEnd) {
+            boolean val = grid[rowStart][colStart] == 1 ? true : false;
+            Node base = new Node(val, true);
+            return base;
+        }
+        Node node = new Node();
+        int rowMid = (rowStart+rowEnd)/2;
+        int colMid = (colStart+colEnd)/2;
+        node.topLeft = construct(grid,rowStart,rowMid,colStart,colMid);
+        node.topRight = construct(grid,rowStart,rowMid,colMid+1,colEnd);
+        node.bottomLeft = construct(grid,rowMid+1,rowEnd,colStart,colMid);
+        node.bottomRight = construct(grid,rowMid+1,rowEnd,colMid+1,colEnd);
+        if(evaluateLeaf(node)) {
+            node.isLeaf = true;
+            node.val = node.topLeft.val;
+            node.topLeft = node.topRight = node.bottomLeft = node.bottomRight = null;
+        } else {
+            node.isLeaf = false;
+            node.val = true;
+        }
+        return node;
+    }
+    private boolean evaluateLeaf(Node node) {
+    return node.topLeft.val==node.topRight.val&&node.bottomLeft.val==node.bottomRight.val&&node.topLeft.val==node.bottomLeft.val&&node.topLeft.isLeaf
+    &&node.topRight.isLeaf&&node.bottomLeft.isLeaf&&node.bottomRight.isLeaf;
+}
+}
+
+
+
